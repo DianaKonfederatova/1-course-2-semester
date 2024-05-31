@@ -1,0 +1,97 @@
+/*  дано N
+квадратов 
+Суперкласс: Создать класс квадрат. Поле класса – длина стороны. 
+Предусмотреть в классе методы вычисления диагонали, периметра, площади и вывода сведений о фигуре.
+*/
+
+#include <iostream>//вывод-ввод
+#include <vector>//динамический массив
+#include <cmath>//набор математических функций
+#include <limits>//определяет числовые ограничения целочисленных типов
+#include <algorithm>//набор алгоритмов (массивы, сортиртировка и т.д..)
+
+using namespace std;//пространство имен содержит все имена из стандартной библиотеки языка C++, такие как поток вывода cin или класс string.
+
+// Класс для квадратов
+class Square {
+private://свойства и методы доступны только внутри класса.
+    double side; // Длина стороны квадрата
+
+public://свойства и методы доступны без ограничений.
+    // Конструктор
+    Square(double side) : side(side) {}//В теле конструктора присваивается значение параметра "side" переменной класса "side".
+
+    // Метод для получения длины стороны квадрата
+    double Side() const {
+        return side;
+    }
+
+    // Метод вычисления диагонали
+    double diagonal() const {
+        return sqrt(2) * side;//√2 умножить на длину стороны квадрата.
+    }
+
+    // Метод вычисления периметра
+    double perimeter() const {
+        return 4 * side;
+    }
+
+    // Метод вычисления площади
+    double area() const {
+        return side * side;
+    }
+
+    // Метод для вывода информации о квадрате
+    void outputTo() const {
+        cout << "Квадрат: " << endl;
+        cout << "Длина стороны: " << side << endl;
+        cout << "Длина диагонали: " << diagonal() << endl;
+        cout << "Периметр: " << perimeter() << endl;
+        cout << "Площадь: " << area() << endl;
+    }
+};
+
+int main() {
+    vector<Square> squares;//Объявление векторов squares и largeSquares для хранения объектов класса Square
+    vector<Square> largeSquares;
+
+    int N;//хранение количества квадратов
+    cout << "Введите количество квадратов: ";
+    cin >> N;
+
+    if (N <= 0) {
+        cout << "Некорректное количество квадратов." << endl;
+        return 1;
+    }
+
+    for (int i = 0; i < N; ++i) {
+        double side;
+        cout << "Введите длину стороны квадрата " << i + 1 << ": ";
+        cin >> side;
+
+        Square square(side);
+        squares.push_back(square);
+
+        // Переписываем квадраты с площадью больше 50 в новый вектор
+        if (square.area() > 50) {
+            largeSquares.push_back(square);
+        }
+    }
+
+    if (largeSquares.empty()) {//проверка на пустоту вектора 
+        cout << "Новый вектор пуст." << endl;
+    } else {
+        // Сортировка нового вектора по длине стороны квадрата
+        sort(largeSquares.begin(), largeSquares.end(), [](const Square& a, const Square& b) {
+            return a.Side() < b.Side();
+        });
+
+        // Вывод отсортированных объектов
+        for (const auto& square : largeSquares) {//auto Ключевое слово направляет компилятору использовать выражение инициализации объявленной переменной или лямбда-параметра выражения, чтобы вывести его тип.
+            square.outputTo();
+            cout << endl;
+        }
+    }
+
+    return 0;
+}
