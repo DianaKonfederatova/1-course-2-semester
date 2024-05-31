@@ -1,0 +1,63 @@
+   12.c
+#include <stdio.h>
+#include "header.h"
+
+
+int main() {
+    struct Fraction fraction1 = {1, 2};  // Первая дробь 1/2
+    struct Fraction fraction2 = {1, 3};  // Вторая дробь 1/3
+
+    struct Fraction sum = addFractions(fraction1, fraction2);//обазночение функции, как суммирование
+    struct Fraction difference = subtractFractions(fraction1, fraction2);//обозначение функции, как разность
+
+    printf("Сумма дробей: %d/%d\n", sum.numerator, sum.denominator);
+    printf("Разность дробей: %d/%d\n", difference.numerator, difference.denominator);
+
+    return 0;
+} 
+
+     main.c
+#include <stdio.h>
+//Функция возвращает целочисленное значение наибольшего общего делителя
+int gcd(int a, int b) {
+    while (b != 0) {//цикл , который будет выполняться до тех пор, пока b не станет равным 0. 
+        int tmp = b;//объявление переменной типа и присваивание ей значения . Используется для временного хранения значения
+        b = a % b;//присваивание переменной значения остатка от деления
+        a = tmp;//присваивание переменной значения переменной
+    }
+    return a;//возврат значения переменной . После того как цикл завершится, возвращается последнее значение, которое и является наибольшим общим делителем.
+}
+// Функция для сокращения дроби
+void reduceFraction(struct Fraction *f) {//Функция уменьшает дробь до ее минимального представления, деля ее числитель и знаменатель на их наибольший общий делитель.
+    int common_divisor = gcd(f->numerator, f->denominator);//вычисляет наибольший общий делитель числителя и знаменателя дроби. Функция gcd принимает два целых числа и возвращает их НОД.
+    f->numerator /= common_divisor;//строка делит числитель дроби на НОД
+    f->denominator /= common_divisor;//строка делит знаменатель дроби на НОД.
+}
+// Функция для сложения двух дробей
+struct Fraction addFractions(struct Fraction f1, struct Fraction f2) {//функция сложения дробей, которая принимает две структуры Fraction (дроби) в качестве параметров и возвращает новую структуру Fraction(дробь), представляющую сумму двух входных дробей.
+    struct Fraction result;//структура будет содержать результат сложения двух входных дробей.
+    result.numerator = f1.numerator * f2.denominator + f2.numerator * f1.denominator;//вычисление числителя
+    result.denominator = f1.denominator * f2.denominator;//вычисления знаменателя
+    reduceFraction(&result);//упрощает дробь до ее минимального представления
+    return result;//возвращение структуры result, которая содержит сумму двух входных дробей в упрощенном виде.
+}
+// Функция для вычитания одной дроби из другой
+struct Fraction subtractFractions(struct Fraction f1, struct Fraction f2) {//функция вычетания дробей, которая принемает две дроби в качестве параметров и возвращает новую дробь, представ. разность двух входных дробей
+    struct Fraction result;//структура будет содержать результат вычетания
+    result.numerator = f1.numerator * f2.denominator - f2.numerator * f1.denominator;//нахождение числителя
+    result.denominator = f1.denominator * f2.denominator;//нахождение знаменателя
+    reduceFraction(&result);//упрощает дробь до ее минимального представления
+    return result;//возвращение структуры result, которая содержит разность двух входных дробей в упрощенном виде.
+}
+int main() {
+    struct Fraction fraction1 = {1, 2};  // Первая дробь 1/2
+    struct Fraction fraction2 = {1, 3};  // Вторая дробь 1/3
+
+    struct Fraction sum = addFractions(fraction1, fraction2);//обазночение функции, как суммирование
+    struct Fraction difference = subtractFractions(fraction1, fraction2);//обозначение функции, как разность
+
+    printf("Сумма дробей: %d/%d\n", sum.numerator, sum.denominator);
+    printf("Разность дробей: %d/%d\n", difference.numerator, difference.denominator);
+
+    return 0;
+}
